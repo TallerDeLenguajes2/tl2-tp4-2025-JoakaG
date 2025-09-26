@@ -9,14 +9,16 @@ namespace CadeteriaControlador
     {
         private AccesoADatosCSV ADCSV;
         private AccesoADatosJSON ADJSON;
+        private AccesoADatosPedidos ADPE;
         private Cadeteria cadeteria;
 
         public CadeteriaController()
         {
             ADCSV = new AccesoADatosCSV();
             ADJSON = new AccesoADatosJSON();
+            ADPE = new AccesoADatosPedidos();
             cadeteria = ADCSV.CargarDatos("src/cadeteria.csv")[0];
-
+            cadeteria.ListadoPedidos = ADPE.CargarDatos("src/pedidos.csv");
         }
 
         [HttpGet("cadetes")]
@@ -37,34 +39,39 @@ namespace CadeteriaControlador
         }
 
         [HttpPost("agregarPedido")]
-        public ActionResult<Pedidos> AgregarPedido(Pedidos pedido)
+        public IActionResult AgregarPedido(Pedidos pedido)
         {
-            var nuevoPedido = cadeteria.DarAltaPedido(
+            cadeteria.DarAltaPedido(
             pedido.Cliente.Nombre,
             pedido.Cliente.Direccion,
             pedido.Cliente.Telefono,
             pedido.Cliente.DatosReferenciaDireccion,
             pedido.Obs
+            
         );
-            return Ok(nuevoPedido);
+            ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
+            return NoContent();
         }
         [HttpPut("asignarPedido")]
-        public ActionResult<bool> AsignarPedido(int idPedido, int idCadete)
+        public IActionResult AsignarPedido(int idPedido, int idCadete)
         {
-            return Ok(cadeteria.AsignarPedido(idPedido, idCadete));
+            cadeteria.AsignarPedido(idPedido, idCadete);
+            ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
+            return Ok();
         }
         [HttpPut("cambiarEstadoPedido")]
         public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
         {
-
-            return Ok(cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado));
+            cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado);
+            ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
+            return Ok();
         }
         [HttpPut("cambiarCadetePedido")]
         public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
         {
-            return Ok(cadeteria.ReasignarPedido(idPedido, idNuevoCadete));
+            cadeteria.ReasignarPedido(idPedido, idNuevoCadete);        
+            ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
+            return Ok();
         }
-
-
     }
 }

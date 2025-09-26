@@ -3,7 +3,7 @@ public class Cadeteria
 {
     private string nombre;
     private string telefono;
-    private List<Cadetes>? listadoCadetes;
+    private List<Cadetes> listadoCadetes;
     private List<Pedidos> listadoPedidos;
 
     public Cadeteria(string nombre, string telefono)
@@ -14,7 +14,7 @@ public class Cadeteria
         this.ListadoPedidos = new List<Pedidos>();
     }
 
-    public List<Cadetes>? ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
+    public List<Cadetes> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
     public string Nombre { get => nombre; set => nombre = value; }
     public string Telefono { get => telefono; set => telefono = value; }
     public List<Pedidos> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
@@ -42,13 +42,11 @@ public class Cadeteria
     public Cadetes? BuscarCadetePorPedido(int idPedido)
     {
         Pedidos? pedido;
-        if (listadoCadetes != null)
+
+        pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
+        if (pedido != null)
         {
-            pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
-            if (pedido != null)
-            {
-                return listadoCadetes.FirstOrDefault(c => c.Id == pedido.IdCadeteACargo);
-            }
+            return listadoCadetes.FirstOrDefault(c => c.Id == pedido.IdCadeteACargo);
         }
         return null;
     }
@@ -56,18 +54,15 @@ public class Cadeteria
     public Pedidos? BuscarPedido(int idPedido)
     {
         Pedidos? pedido = null;
-        if (listadoCadetes != null)
-        {
-            pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
-        }
+        pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
         return pedido;
     }
-    public List<Cadetes>? ObtenerCadetes()
+    public List<Cadetes> ObtenerCadetes()
     {
         return listadoCadetes;
     }
 
-    public List<Pedidos>? ObtenerPedidos()
+    public List<Pedidos> ObtenerPedidos()
     {
         return listadoPedidos;
     }
@@ -75,8 +70,7 @@ public class Cadeteria
     {
         var TotalEntregado = 0;
         List<string> DatosGeneradosDecADETES = new List<string>();
-        if (listadoCadetes != null)
-        {
+
             int cantidadEntregados;
             foreach (var cadete in listadoCadetes)
             {
@@ -86,7 +80,6 @@ public class Cadeteria
             }
 
             DatosGeneradosDecADETES.Add($"Total de Envíos realizados: {TotalEntregado}");
-        }
         return DatosGeneradosDecADETES;
     }
 
@@ -152,7 +145,7 @@ public class Cadeteria
 
         // Verificaciones
         if (pedido == null || cadete == null)
-            return false; 
+            return false;
 
         if (pedido.Estado1 == Pedidos.Estado.entregado || pedido.Estado1 == Pedidos.Estado.cancelado)
             return false;
