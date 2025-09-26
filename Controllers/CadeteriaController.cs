@@ -16,7 +16,7 @@ namespace CadeteriaControlador
             ADCSV = new AccesoADatosCSV();
             ADJSON = new AccesoADatosJSON();
             cadeteria = ADCSV.CargarDatos("src/cadeteria.csv")[0];
-            
+
         }
 
         [HttpGet("cadetes")]
@@ -62,7 +62,7 @@ namespace CadeteriaControlador
         [HttpPut("cambiarCadetePedido")]
         public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
         {
-            return Ok(true);
+            return Ok(cadeteria.ReasignarPedido(idPedido, idNuevoCadete));
         }
 
 

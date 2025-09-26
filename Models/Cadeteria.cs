@@ -145,6 +145,21 @@ public class Cadeteria
         return true;
     }
 
+    public bool ReasignarPedido(int idPedido, int idCadete)
+    {
+        var pedido = BuscarPedido(idPedido);
+        var cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+
+        // Verificaciones
+        if (pedido == null || cadete == null)
+            return false; 
+
+        if (pedido.Estado1 == Pedidos.Estado.entregado || pedido.Estado1 == Pedidos.Estado.cancelado)
+            return false;
+
+        pedido.IdCadeteACargo = cadete.Id;
+        return true;
+    }
 
     public Pedidos? DarAltaPedido(string nombre, string direccion, string telefono, string? datosRefDirecc = null, string? observaciones = null)
     {
@@ -153,7 +168,7 @@ public class Cadeteria
 
         var pedido = new Pedidos(observaciones, nombre, direccion, telefono, datosRefDirecc);
 
-        ListadoPedidos.Add(pedido);
+        listadoPedidos.Add(pedido);
         return pedido;
     }
 }
