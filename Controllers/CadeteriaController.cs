@@ -50,28 +50,28 @@ namespace CadeteriaControlador
             
         );
             ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
-            return NoContent();
+            return Created();
         }
         [HttpPut("asignarPedido")]
         public IActionResult AsignarPedido(int idPedido, int idCadete)
         {
             cadeteria.AsignarPedido(idPedido, idCadete);
             ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
-            return Ok();
+            return NoContent();
         }
         [HttpPut("cambiarEstadoPedido")]
         public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
         {
             cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado);
             ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
-            return Ok();
+            return NoContent();
         }
         [HttpPut("cambiarCadetePedido")]
         public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
         {
             cadeteria.ReasignarPedido(idPedido, idNuevoCadete);        
             ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
-            return Ok();
+            return NoContent();
         }
     }
 }
