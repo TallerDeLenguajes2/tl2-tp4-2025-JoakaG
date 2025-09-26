@@ -7,51 +7,60 @@ namespace CadeteriaControlador
 
     public class CadeteriaController : ControllerBase
     {
-        [HttpGet("test")]
-        public ActionResult<string> Test()
+        private AccesoADatosCSV ADCSV;
+        private AccesoADatosJSON ADJSON;
+        private Cadeteria cadeteria;
+
+        public CadeteriaController()
         {
-            return Ok("OK");
+            ADCSV = new AccesoADatosCSV();
+            ADJSON = new AccesoADatosJSON();
+            cadeteria = ADCSV.CargarDatos("src/cadeteria.csv")[0];
+            
         }
 
-
         [HttpGet("cadetes")]
-        public ActionResult GetCadetes()
+        public ActionResult<Cadetes> GetCadetes()
         {
-            List<Cadetes> cadetes = new();
-            return Ok(cadetes);
+            return Ok(cadeteria.ObtenerCadetes());
         }
 
         [HttpGet("pedidos")]
-        public ActionResult GetPedidos()
+        public ActionResult<Pedidos> GetPedidos()
         {
-            List<Pedidos> pedidos = new();
-            return Ok(pedidos);
+            return Ok(cadeteria.ObtenerPedidos());
         }
         [HttpGet("informe")]
-        public ActionResult GetInforme()
+        public ActionResult<string> GetInforme()
         {
-            string informe = "Hola";
-            return Ok(informe);
+            return Ok(cadeteria.GenerarInforme());
         }
 
         [HttpPost("agregarPedido")]
-        public ActionResult AgregarPedido(Pedidos pedido)
+        public ActionResult<Pedidos> AgregarPedido(Pedidos pedido)
         {
-            return Ok(pedido);
+            var nuevoPedido = cadeteria.DarAltaPedido(
+            pedido.Cliente.Nombre,
+            pedido.Cliente.Direccion,
+            pedido.Cliente.Telefono,
+            pedido.Cliente.DatosReferenciaDireccion,
+            pedido.Obs
+        );
+            return Ok(nuevoPedido);
         }
         [HttpPut("asignarPedido")]
-        public ActionResult AsignarPedido(int idPedido, int idCadete)
+        public ActionResult<bool> AsignarPedido(int idPedido, int idCadete)
         {
-            return Ok(true);
+            return Ok(cadeteria.AsignarPedido(idPedido, idCadete));
         }
         [HttpPut("cambiarEstadoPedido")]
-        public ActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
+        public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
         {
 
-            return Ok(true);
+            return Ok(cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado));
         }
         [HttpPut("cambiarCadetePedido")]
-        public ActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
+        public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
         {
             return Ok(true);
         }

@@ -62,9 +62,14 @@ public class Cadeteria
         }
         return pedido;
     }
-    public List<Cadetes> ?ObtenerCadetes()
+    public List<Cadetes>? ObtenerCadetes()
     {
         return listadoCadetes;
+    }
+
+    public List<Pedidos>? ObtenerPedidos()
+    {
+        return listadoPedidos;
     }
     public List<string> GenerarInforme()
     {
@@ -79,7 +84,7 @@ public class Cadeteria
                 cantidadEntregados = listadoPedidos.Count(p => p.Estado1 == Pedidos.Estado.entregado && p.IdCadeteACargo == cadete.Id);
                 DatosGeneradosDecADETES.Add($"cadete:{cadete.Nombre} id: {cadete.Id} - Total de Pedidos Entregados: {cantidadEntregados} - Jornal a Cobrar: {JornalACobrar(cadete.Id)}");
             }
-            
+
             DatosGeneradosDecADETES.Add($"Total de Envíos realizados: {TotalEntregado}");
         }
         return DatosGeneradosDecADETES;
@@ -91,4 +96,66 @@ public class Cadeteria
         montoTotal = this.listadoPedidos.Count(p => p.IdCadeteACargo == idCadete && p.Estado1 == Pedidos.Estado.entregado) * 500;
         return montoTotal;
     }
+
+    public bool AsignarCadete(int idPedido, int idCadete)
+    {
+        var pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
+        var cadete = listadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+
+        if (pedido != null && cadete != null && pedido.IdCadeteACargo == -9999)
+        {
+            pedido.IdCadeteACargo = idCadete;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool CambiarDeEstadoPedido(int idPedido, int nuevoEstado)
+    {
+        var cadete = BuscarCadetePorPedido(idPedido);
+        var pedido = BuscarPedido(idPedido);
+
+        if (cadete == null || pedido == null)
+        {
+            return false;
+        }
+        if (pedido.Estado1 == Pedidos.Estado.entregado || pedido.Estado1 == Pedidos.Estado.cancelado)
+        {
+            return false;
+        }
+
+        switch (nuevoEstado)
+        {
+            case 0:
+                pedido.Estado1 = Pedidos.Estado.pendiente;
+                break;
+            case 1:
+                pedido.Estado1 = Pedidos.Estado.entregado;
+                break;
+            case 2:
+                pedido.Estado1 = Pedidos.Estado.cancelado;
+                break;
+            default:
+
+                return false;
+        }
+
+        return true;
+    }
+
+
+    public Pedidos? DarAltaPedido(string nombre, string direccion, string telefono, string? datosRefDirecc = null, string? observaciones = null)
+    {
+        if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(direccion) || string.IsNullOrWhiteSpace(telefono))
+            return null;
+
+        var pedido = new Pedidos(observaciones, nombre, direccion, telefono, datosRefDirecc);
+
+        ListadoPedidos.Add(pedido);
+        return pedido;
+    }
 }
+
+

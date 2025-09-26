@@ -10,14 +10,20 @@ public class Pedidos
     public int Nro { get => nro; set => nro = value; }
     public Estado Estado1 { get => estado; set => estado = value; }
     public int IdCadeteACargo { get => idCadeteACargo; set => idCadeteACargo = value; }
+    public string? Obs { get => obs; set => obs = value; }
 
-    public Pedidos(string? obs, string nombreC, string direccionC, string telefonoC, string ?datosRefDirecC)
+    public Pedidos()
     {
         contador++;
         this.Nro = contador;
-        this.obs = obs;
-        this.cliente = new Clientes(nombreC, direccionC, telefonoC, datosRefDirecC);
         this.estado = Estado.pendiente;
+    }
+
+    public Pedidos(string? obs, string nombreC, string direccionC, string telefonoC, string? datosRefDirecC)
+        : this()
+    {
+        this.Obs = obs;
+        this.cliente = new Clientes(nombreC, direccionC, telefonoC, datosRefDirecC);
     }
     public enum Estado
     {
