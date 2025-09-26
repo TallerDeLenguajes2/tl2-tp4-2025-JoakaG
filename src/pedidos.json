@@ -1,0 +1,14 @@
+[
+  {
+    "Cliente": {
+      "Direccion": "calle falsa",
+      "DatosReferenciaDireccion": "",
+      "Nombre": "pipo",
+      "Telefono": "3815220"
+    },
+    "Nro": 1,
+    "Estado1": 0,
+    "IdCadeteACargo": 0,
+    "Obs": "sanana"
+  }
+]

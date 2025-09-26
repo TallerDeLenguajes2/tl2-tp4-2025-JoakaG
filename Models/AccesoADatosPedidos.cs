@@ -1,20 +1,29 @@
 using System.Text.Json;
-public class AccesoADatosPedidos : IAccesoADatos<Pedidos>
+public class AccesoADatosPedidos 
 {
 
-    public List<Pedidos> CargarDatos(string archivoJson)
+    public List<Pedidos> CargarDatos()
     {
-         if (!File.Exists(archivoJson))
+        string archivoJson = "src/pedidos.json";
+        if (!File.Exists(archivoJson))
             return new List<Pedidos>();
-
         string json = File.ReadAllText(archivoJson);
         return JsonSerializer.Deserialize<List<Pedidos>>(json) ?? new List<Pedidos>();
     }
-    public void GuardarDatos(string archivoJson, List<Pedidos> datos)
+
+    public void GuardarDato( Pedidos datos)
     {
-        var pedido = CargarDatos("src/pedidos.json");
-        var newid = pedido.Max(a => a.Nro) + 1;
-        string json = JsonSerializer.Serialize(datos, new JsonSerializerOptions { WriteIndented = true });
+        string archivoJson = "src/pedidos.json";
+        var pedidos = CargarDatos();
+        var newid = 1;
+        if (pedidos.Count > 0)
+        {
+            newid = pedidos.Max(a => a.Nro) + 1;
+        }
+        datos.Nro = newid;
+        pedidos.Add(datos);
+        string json = JsonSerializer.Serialize(pedidos, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(archivoJson, json);
     }
+
 }
