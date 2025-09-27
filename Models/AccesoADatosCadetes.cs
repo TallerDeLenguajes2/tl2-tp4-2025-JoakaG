@@ -11,8 +11,9 @@ public class AccesoADatosCadetes
         return JsonSerializer.Deserialize<List<Cadetes>>(json) ?? new List<Cadetes>();
     }
 
-    public void GuardarDatos(string archivoJson, List<Cadetes> datos)
+    public void GuardarDatos(List<Cadetes> datos)
     {
+        string archivoJson = "src/cadetes.json";
         string json = JsonSerializer.Serialize(datos, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(archivoJson, json);
     }

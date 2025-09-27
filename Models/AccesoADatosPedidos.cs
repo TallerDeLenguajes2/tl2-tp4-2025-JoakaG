@@ -11,11 +11,10 @@ public class AccesoADatosPedidos
         return JsonSerializer.Deserialize<List<Pedidos>>(json) ?? new List<Pedidos>();
     }
 
-    public void GuardarDato(List<Pedidos> pedidos)
+    public void GuardarDatos(List<Pedidos> pedidos)
     {
         string archivoJson = "src/pedidos.json";
         string json = JsonSerializer.Serialize(pedidos, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(archivoJson, json);
     }
-
 }

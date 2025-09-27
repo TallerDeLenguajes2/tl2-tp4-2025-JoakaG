@@ -8,21 +8,35 @@ namespace CadeteriaControlador
     public class CadeteriaController : ControllerBase
     {
 
+        private AccesoADatosCadeteria accCadeteria;
+        private AccesoADatosCadetes accCadetes;
+        private AccesoADatosPedidos accPedidos;
+        private Cadeteria cadeteria;
+
+        public CadeteriaController()
+        {
+
+            accCadeteria = new AccesoADatosCadeteria();
+            accCadetes = new AccesoADatosCadetes();
+            accPedidos = new AccesoADatosPedidos();
+            cadeteria = accCadeteria.CargarDatos()[0];
+            cadeteria.ListadoCadetes = accCadetes.CargarDatos();
+            cadeteria.ListadoPedidos = accPedidos.CargarDatos();
+        }
+
 
         [HttpGet("cadetes")]
-        public ActionResult<Cadetes> GetCadetes()
+        public IActionResult GetCadetes()
         {
-            var acc = new AccesoADatosCadetes();
-            var cadetes = acc.CargarDatos();
-            return Ok(cadetes);
+
+            return Ok(cadeteria.ObtenerCadetes());
         }
 
         [HttpGet("pedidos")]
         public ActionResult<Pedidos> GetPedidos()
         {
-            var acc = new AccesoADatosPedidos();
-            var pedidos = acc.CargarDatos();
-            return Ok(pedidos);
+
+            return Ok(cadeteria.ObtenerPedidos());
         }
         // [HttpGet("informe")]
         // public IActionResult GetInforme()
@@ -35,36 +49,26 @@ namespace CadeteriaControlador
         [HttpPost("agregarPedido")]
         public IActionResult AgregarPedido(Pedidos pedido)
         {
-            var acc = new AccesoADatosPedidos();
-            var pedidos = acc.CargarDatos();
-            pedidos.Add(pedido);
-            
-            acc.GuardarDato(pedidos);
+            cadeteria.DarAltaPedido(
+                pedido.Cliente.Nombre, pedido.Cliente.Direccion, pedido.Cliente.Telefono, pedido.Cliente.DatosReferenciaDireccion, pedido.Obs
+            );
+            accPedidos.GuardarDatos(cadeteria.ObtenerPedidos());
             return Created();
         }
 
-         [HttpPut("cambiarEstadoPedido")]
-         public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
-         {
-            var accC = new AccesoADatosCadeteria();
-            var accP = new AccesoADatosPedidos();
-            Cadeteria cadeteria = accC.CargarDatos()[0];
-            var pedidos = accP.CargarDatos();
-            cadeteria.ListadoPedidos = pedidos;
+        [HttpPut("cambiarEstadoPedido")]
+        public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
+        {
             cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado);
-            
+            accPedidos.GuardarDatos(cadeteria.ObtenerPedidos());
             return NoContent();
-         }
-              [HttpPut("cambiarCadetePedido")]
-              public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
-               {
-            var accC = new AccesoADatosCadeteria();
-            var accP = new AccesoADatosPedidos();
-            var pedidos = accP.CargarDatos();
-            var cadeteria = accC.CargarDatos()[0];
-            cadeteria.ListadoPedidos = pedidos;
+        }
+        [HttpPut("cambiarCadetePedido")]
+        public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
+        {
             cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
+            accPedidos.GuardarDatos(cadeteria.ObtenerPedidos());
             return NoContent();
-             }
+        }
     }
 }

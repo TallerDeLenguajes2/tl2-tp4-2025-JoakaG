@@ -8,7 +8,19 @@
     },
     "Nro": 1,
     "Estado1": 0,
-    "IdCadeteACargo": 0,
+    "IdCadeteACargo": -9999,
     "Obs": "sanana"
+  },
+  {
+    "Cliente": {
+      "Direccion": "romano",
+      "DatosReferenciaDireccion": "casa roja esquina",
+      "Nombre": "Joaquina",
+      "Telefono": "1234567"
+    },
+    "Nro": 6,
+    "Estado1": 0,
+    "IdCadeteACargo": 1,
+    "Obs": ""
   }
 ]

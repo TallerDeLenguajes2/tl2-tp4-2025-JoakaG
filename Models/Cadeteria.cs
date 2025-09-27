@@ -8,8 +8,8 @@ public class Cadeteria
 
     public Cadeteria(string nombre, string telefono)
     {
-        this.nombre = nombre;
-        this.telefono = telefono;
+        Nombre = nombre;
+        Telefono = telefono;
         ListadoCadetes = new List<Cadetes>();
         ListadoPedidos = new List<Pedidos>();
     }
@@ -53,9 +53,7 @@ public class Cadeteria
 
     public Pedidos? BuscarPedido(int idPedido)
     {
-        Pedidos? pedido = null;
-        pedido = listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);
-        return pedido;
+        return listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);;
     }
     public List<Cadetes> ObtenerCadetes()
     {
@@ -108,7 +106,6 @@ public class Cadeteria
     public bool CambiarDeEstadoPedido(int idPedido, int nuevoEstado)
     {
         var pedido = BuscarPedido(idPedido);
-
         if (pedido == null)
         {
             return false;
@@ -139,8 +136,8 @@ public class Cadeteria
 
     public bool ReasignarPedido(int idPedido, int idCadete)
     {
-        var pedido = BuscarPedido(idPedido);
-        var cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+        Pedidos ?pedido = BuscarPedido(idPedido);
+        Cadetes ?cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
 
         // Verificaciones
         if (pedido == null || cadete == null)
@@ -149,7 +146,7 @@ public class Cadeteria
         if (pedido.Estado1 == Pedidos.Estado.entregado || pedido.Estado1 == Pedidos.Estado.cancelado)
             return false;
 
-        pedido.IdCadeteACargo = cadete.Id;
+        pedido.IdCadeteACargo = idCadete;
         return true;
     }
 

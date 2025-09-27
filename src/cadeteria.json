@@ -1,6 +1,8 @@
-{
-  "nombre": "Cadeteria Ejemplo",
-  "telefono": "123456789",
-  "listadoCadetes": [],
-  "listadoPedidos": []
-}
+[
+  {
+    "Nombre": "Cadeteria Ejemplo",
+    "Telefono": "123456789",
+    "ListadoCadetes": [],
+    "ListadoPedidos": []
+  }
+]
