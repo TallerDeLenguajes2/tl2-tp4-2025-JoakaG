@@ -3,15 +3,15 @@ public class Cadeteria
 {
     private string nombre;
     private string telefono;
-    private List<Cadetes> listadoCadetes;
-    private List<Pedidos> listadoPedidos;
+    private List<Cadetes> listadoCadetes = null!;
+    private List<Pedidos> listadoPedidos = null!;
 
     public Cadeteria(string nombre, string telefono)
     {
         this.nombre = nombre;
         this.telefono = telefono;
-        this.ListadoCadetes = new List<Cadetes>();
-        this.ListadoPedidos = new List<Pedidos>();
+        ListadoCadetes = new List<Cadetes>();
+        ListadoPedidos = new List<Pedidos>();
     }
 
     public List<Cadetes> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
@@ -107,10 +107,9 @@ public class Cadeteria
 
     public bool CambiarDeEstadoPedido(int idPedido, int nuevoEstado)
     {
-        var cadete = BuscarCadetePorPedido(idPedido);
         var pedido = BuscarPedido(idPedido);
 
-        if (cadete == null || pedido == null)
+        if (pedido == null)
         {
             return false;
         }

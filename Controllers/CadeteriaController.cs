@@ -12,16 +12,16 @@ namespace CadeteriaControlador
         [HttpGet("cadetes")]
         public ActionResult<Cadetes> GetCadetes()
         {
-            var ACCDCad = new AccesoADatosCadetes();
-            var cadetes = ACCDCad.CargarDatos();
+            var acc = new AccesoADatosCadetes();
+            var cadetes = acc.CargarDatos();
             return Ok(cadetes);
         }
 
         [HttpGet("pedidos")]
         public ActionResult<Pedidos> GetPedidos()
         {
-            var ACCDCad = new AccesoADatosPedidos();
-            var pedidos = ACCDCad.CargarDatos();
+            var acc = new AccesoADatosPedidos();
+            var pedidos = acc.CargarDatos();
             return Ok(pedidos);
         }
         // [HttpGet("informe")]
@@ -35,24 +35,36 @@ namespace CadeteriaControlador
         [HttpPost("agregarPedido")]
         public IActionResult AgregarPedido(Pedidos pedido)
         {
-            var ACCDP = new AccesoADatosPedidos();
-            ACCDP.GuardarDato(pedido);
+            var acc = new AccesoADatosPedidos();
+            var pedidos = acc.CargarDatos();
+            pedidos.Add(pedido);
+            
+            acc.GuardarDato(pedidos);
             return Created();
         }
 
-        // [HttpPut("cambiarEstadoPedido")]
-        // public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
-        // {
-        //     var ACCDP = AccesoADatosPedidos();
-        //     CambiarDeEstadoPedido(idPedido, NuevoEstado);
-        //     return NoContent();
-        // }
-        //     [HttpPut("cambiarCadetePedido")]
-        //     public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
-        //     {
-        //         cadeteria.ReasignarPedido(idPedido, idNuevoCadete);        
-        //         ADPE.GuardarDatos("src/pedidos.csv", cadeteria.ObtenerPedidos());
-        //         return NoContent();
-        //     }
+         [HttpPut("cambiarEstadoPedido")]
+         public IActionResult CambiarEstadoPedido(int idPedido, int NuevoEstado)
+         {
+            var accC = new AccesoADatosCadeteria();
+            var accP = new AccesoADatosPedidos();
+            Cadeteria cadeteria = accC.CargarDatos()[0];
+            var pedidos = accP.CargarDatos();
+            cadeteria.ListadoPedidos = pedidos;
+            cadeteria.CambiarDeEstadoPedido(idPedido, NuevoEstado);
+            
+            return NoContent();
+         }
+              [HttpPut("cambiarCadetePedido")]
+              public IActionResult CambiarCadetePedido(int idPedido, int idNuevoCadete)
+               {
+            var accC = new AccesoADatosCadeteria();
+            var accP = new AccesoADatosPedidos();
+            var pedidos = accP.CargarDatos();
+            var cadeteria = accC.CargarDatos()[0];
+            cadeteria.ListadoPedidos = pedidos;
+            cadeteria.ReasignarPedido(idPedido, idNuevoCadete);
+            return NoContent();
+             }
     }
 }
