@@ -38,13 +38,11 @@ namespace CadeteriaControlador
 
             return Ok(cadeteria.ObtenerPedidos());
         }
-        // [HttpGet("informe")]
-        // public IActionResult GetInforme()
-        // {
-        //     var ACCDCadeteria = new AccesoADatosCadeteria();
-        //     Cadeteria cadeteria = ACCDCadeteria.CargarDatos()[0];
-        //     return Ok(cadeteria.GenerarInforme());
-        // }
+         [HttpGet("informe")]
+         public IActionResult GetInforme()
+         {
+             return Ok(cadeteria.GenerarInforme());
+         }
 
         [HttpPost("agregarPedido")]
         public IActionResult AgregarPedido(Pedidos pedido)

@@ -1,4 +1,4 @@
-
+using System.Text.Json;
 public class Cadeteria
 {
     private string nombre;
@@ -53,7 +53,7 @@ public class Cadeteria
 
     public Pedidos? BuscarPedido(int idPedido)
     {
-        return listadoPedidos.FirstOrDefault(p => p.Nro == idPedido);;
+        return listadoPedidos.FirstOrDefault(p => p.Nro == idPedido); ;
     }
     public List<Cadetes> ObtenerCadetes()
     {
@@ -69,15 +69,15 @@ public class Cadeteria
         var TotalEntregado = 0;
         List<string> DatosGeneradosDecADETES = new List<string>();
 
-            int cantidadEntregados;
-            foreach (var cadete in listadoCadetes)
-            {
-                cantidadEntregados = 0;
-                cantidadEntregados = listadoPedidos.Count(p => p.Estado1 == Pedidos.Estado.entregado && p.IdCadeteACargo == cadete.Id);
-                DatosGeneradosDecADETES.Add($"cadete:{cadete.Nombre} id: {cadete.Id} - Total de Pedidos Entregados: {cantidadEntregados} - Jornal a Cobrar: {JornalACobrar(cadete.Id)}");
-            }
-
-            DatosGeneradosDecADETES.Add($"Total de Envíos realizados: {TotalEntregado}");
+        int cantidadEntregados;
+        foreach (var cadete in listadoCadetes)
+        {
+            cantidadEntregados = 0;
+            cantidadEntregados = listadoPedidos.Count(p => p.Estado1 == Pedidos.Estado.entregado && p.IdCadeteACargo == cadete.Id);
+            TotalEntregado += cantidadEntregados;
+            DatosGeneradosDecADETES.Add($"cadete:{cadete.Nombre} id: {cadete.Id} - Total de Pedidos Entregados: {cantidadEntregados} - Jornal a Cobrar: {JornalACobrar(cadete.Id)}");
+        }
+        DatosGeneradosDecADETES.Add($"Total de Envíos realizados: {TotalEntregado}");
         return DatosGeneradosDecADETES;
     }
 
@@ -136,8 +136,8 @@ public class Cadeteria
 
     public bool ReasignarPedido(int idPedido, int idCadete)
     {
-        Pedidos ?pedido = BuscarPedido(idPedido);
-        Cadetes ?cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
+        Pedidos? pedido = BuscarPedido(idPedido);
+        Cadetes? cadete = ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
 
         // Verificaciones
         if (pedido == null || cadete == null)
