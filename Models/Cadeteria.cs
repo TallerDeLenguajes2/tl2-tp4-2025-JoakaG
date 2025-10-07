@@ -127,8 +127,7 @@ public class Cadeteria
                 pedido.Estado1 = Pedidos.Estado.cancelado;
                 break;
             default:
-
-                return false;
+                break;
         }
 
         return true;

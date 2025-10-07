@@ -28,7 +28,6 @@ namespace CadeteriaControlador
         [HttpGet("cadetes")]
         public IActionResult GetCadetes()
         {
-
             return Ok(cadeteria.ObtenerCadetes());
         }
 
