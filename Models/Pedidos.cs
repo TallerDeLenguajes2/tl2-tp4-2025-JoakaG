@@ -1,7 +1,6 @@
 public class Pedidos
 {
-    private static int contador = 0;
-    private int nro = 0;
+    private int nro;
     private string? obs;
     private Clientes cliente;
     private Estado estado;
@@ -14,15 +13,13 @@ public class Pedidos
 
     public Pedidos()
     {
-        contador++;
-        Nro = contador;
         Estado1 = Estado.pendiente;
-
     }
 
-    public Pedidos(string? obs, string nombreC, string direccionC, string telefonoC, string? datosRefDirecC)
+    public Pedidos(int nro, string? obs, string nombreC, string direccionC, string telefonoC, string? datosRefDirecC)
         : this()
     {
+        Nro = nro;
         Obs = obs;
         Cliente = new Clientes(nombreC, direccionC, telefonoC, datosRefDirecC);
     }

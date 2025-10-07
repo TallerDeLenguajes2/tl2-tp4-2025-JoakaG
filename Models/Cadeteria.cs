@@ -153,8 +153,8 @@ public class Cadeteria
     {
         if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(direccion) || string.IsNullOrWhiteSpace(telefono))
             return null;
-
-        var pedido = new Pedidos(observaciones, nombre, direccion, telefono, datosRefDirecc);
+        var newid = ListadoPedidos.Max(p => p.Nro) + 1;
+        var pedido = new Pedidos(newid, observaciones, nombre, direccion, telefono, datosRefDirecc);
 
         listadoPedidos.Add(pedido);
         return pedido;
